@@ -17,6 +17,33 @@
 // Banana    $0.99
 // Apple     $0.89
 
+const pricingTable = {
+  milk: {
+    unitPrice: 3.97,
+    isOnSale: true,
+    saleUnitNum: 2,
+    salePrice: 5.0,
+  },
+  bread: {
+    unitPrice: 2.17,
+    isOnSale: true,
+    saleUnitNum: 3,
+    salePrice: 6.0,
+  },
+  banana: {
+    unitPrice: 0.99,
+    isOnSale: false,
+    saleUnitNum: undefined,
+    salePrice: undefined,
+  },
+  apple: {
+    unitPrice: 0.89,
+    isOnSale: false,
+    saleUnitNum: undefined,
+    salePrice: undefined,
+  },
+};
+
 //****** Part 2 ******
 //prompt the user for an input of the items available at the grocery store
 //be sure to specify parameters for the user input such as commas or spaces between words
