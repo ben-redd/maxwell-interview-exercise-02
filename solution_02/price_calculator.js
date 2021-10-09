@@ -47,6 +47,35 @@ const pricingTable = {
 //****** Part 2 ******
 //prompt the user for an input of the items available at the grocery store
 //be sure to specify parameters for the user input such as commas or spaces between words
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+readline.question(
+  `Please enter all the items purchased separated by commas \n`,
+  (userInput) => {
+    if (userInput) {
+      console.log(`Your list: ${userInput}`);
+      readline.close();
+    } else {
+      readline.setPrompt(`Error reading list, please try again \n`);
+      readline.prompt();
+      readline.on('line', (userInput) => {
+        if (userInput) {
+          console.log(`Your list: ${userInput}`);
+          readline.close();
+        } else {
+          readline.setPrompt(`Error reading list again, please try again \n`);
+          readline.prompt();
+        }
+      });
+    }
+  },
+);
+readline.on('close', () => {
+  console.log('thank you for providing your list');
+});
 
 //get user input and run a test to ensure that it meets specified parameters
 //convert input into usable data, e.g. an array
