@@ -16,60 +16,62 @@
 // Bread     $2.17            3 for $6.00
 // Banana    $0.99
 // Apple     $0.89
+class PriceCalculator {
+  constructor() {
+    this.pricingTable = {
+      milk: {
+        unitPrice: 3.97,
+        isOnSale: true,
+        saleUnitNum: 2,
+        salePrice: 5.0,
+      },
+      bread: {
+        unitPrice: 2.17,
+        isOnSale: true,
+        saleUnitNum: 3,
+        salePrice: 6.0,
+      },
+      banana: {
+        unitPrice: 0.99,
+        isOnSale: false,
+        saleUnitNum: undefined,
+        salePrice: undefined,
+      },
+      apple: {
+        unitPrice: 0.89,
+        isOnSale: false,
+        saleUnitNum: undefined,
+        salePrice: undefined,
+      },
+    };
+    //pricing array made for easy comparison of the keys in our pricing table object
+    this.pricingArray = Object.keys(this.pricingTable);
+  }
 
-const pricingTable = {
-  milk: {
-    unitPrice: 3.97,
-    isOnSale: true,
-    saleUnitNum: 2,
-    salePrice: 5.0,
-  },
-  bread: {
-    unitPrice: 2.17,
-    isOnSale: true,
-    saleUnitNum: 3,
-    salePrice: 6.0,
-  },
-  banana: {
-    unitPrice: 0.99,
-    isOnSale: false,
-    saleUnitNum: undefined,
-    salePrice: undefined,
-  },
-  apple: {
-    unitPrice: 0.89,
-    isOnSale: false,
-    saleUnitNum: undefined,
-    salePrice: undefined,
-  },
-};
-
-//pricing array made for easy comparison of the keys in our pricing table object
-const pricingArray = Object.keys(pricingTable);
+  //prompt user for input
+  getUserInput() {
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    readline.question(
+      `Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas. \n`,
+      (userInput) => {
+        if (userInput) {
+          console.log(`Your list: ${userInput}`);
+          readline.close();
+        }
+      },
+    );
+    readline.on('close', () => {
+      console.log('thank you for providing your list');
+    });
+  }
+}
 
 //****** Part 2 ******
 //prompt the user for an input of the items available at the grocery store
 //be sure to specify parameters for the user input such as commas or spaces between words
-
-//prompt user
-let getUserInput = () => {
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  readline.question(
-    `Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas. \n`,
-    (userInput) => {
-      if (userInput) {
-        console.log(`Your list: ${userInput}`);
-        readline.close();
-      }
-    },
-  );
-  readline.on('close', () => {
-    console.log('thank you for providing your list');
-  });
-};
 
 //get user input and run a test to ensure that it meets specified parameters
 //convert input into usable data, e.g. an array
@@ -88,6 +90,8 @@ let compareArrayValues = (userArr, pricing) => {
   return true;
 };
 
+let purchase = new PriceCalculator();
+purchase.getUserInput();
 //****** Part 3 ******
 //write a function or method that can take the user input, and the store pricing table and then calculate the total cost
 
