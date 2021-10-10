@@ -44,6 +44,9 @@ const pricingTable = {
   },
 };
 
+//pricing array made for easy comparison of the keys in our pricing table object
+const pricingArray = Object.keys(pricingTable);
+
 //****** Part 2 ******
 //prompt the user for an input of the items available at the grocery store
 //be sure to specify parameters for the user input such as commas or spaces between words
@@ -60,6 +63,7 @@ readline.question(
       console.log(`Your list: ${userInput}`);
       //convert input to an array
       let inputArray = convertStringToArray(userInput);
+      compareArrayValues(inputArray, pricingArray);
       console.log(`Your list as an array: ${inputArray}`);
       readline.close();
     } else {
@@ -88,6 +92,17 @@ readline.on('close', () => {
 //convert input into usable data, e.g. an array
 let convertStringToArray = (string) => {
   return string.replace(/ /g, '').toLowerCase().split(',');
+};
+
+//checks to make sure that the
+let compareArrayValues = (userArr, pricing) => {
+  for (let i = 0; i < userArr.length; i++) {
+    if (!pricing.includes(userArr[i])) {
+      console.log(`the following value is invalid: ${userArr[i]}`);
+      return false;
+    }
+  }
+  return true;
 };
 
 //****** Part 3 ******
