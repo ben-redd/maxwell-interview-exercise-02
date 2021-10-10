@@ -9,7 +9,7 @@
 
 //****** Part 1 ******
 //Store data of this weeks pricing table for the local grocery store
-//pricing table
+// pricing table
 // Item     Unit price        Sale price
 // --------------------------------------
 // Milk      $3.97            2 for $5.00
@@ -52,13 +52,18 @@ const readline = require('readline').createInterface({
   output: process.stdout,
 });
 
+//prompt user
 readline.question(
-  `Please enter all the items purchased separated by commas \n`,
+  `Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas. \n`,
   (userInput) => {
     if (userInput) {
       console.log(`Your list: ${userInput}`);
+      //convert input to an array
+      let inputArray = convertStringToArray(userInput);
+      console.log(`Your list as an array: ${inputArray}`);
       readline.close();
     } else {
+      //reprompt user
       readline.setPrompt(`Error reading list, please try again \n`);
       readline.prompt();
       readline.on('line', (userInput) => {
@@ -66,7 +71,9 @@ readline.question(
           console.log(`Your list: ${userInput}`);
           readline.close();
         } else {
-          readline.setPrompt(`Error reading list again, please try again \n`);
+          readline.setPrompt(
+            `Repeat error reading list, please try again or press ctrl + c to exit the program \n`,
+          );
           readline.prompt();
         }
       });
@@ -79,6 +86,9 @@ readline.on('close', () => {
 
 //get user input and run a test to ensure that it meets specified parameters
 //convert input into usable data, e.g. an array
+let convertStringToArray = (string) => {
+  return string.replace(/ /g, '').toLowerCase().split(',');
+};
 
 //****** Part 3 ******
 //write a function or method that can take the user input, and the store pricing table and then calculate the total cost
