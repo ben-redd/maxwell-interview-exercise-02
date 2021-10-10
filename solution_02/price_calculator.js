@@ -50,43 +50,26 @@ const pricingArray = Object.keys(pricingTable);
 //****** Part 2 ******
 //prompt the user for an input of the items available at the grocery store
 //be sure to specify parameters for the user input such as commas or spaces between words
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
 
 //prompt user
-readline.question(
-  `Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas. \n`,
-  (userInput) => {
-    if (userInput) {
-      console.log(`Your list: ${userInput}`);
-      //convert input to an array
-      let inputArray = convertStringToArray(userInput);
-      compareArrayValues(inputArray, pricingArray);
-      console.log(`Your list as an array: ${inputArray}`);
-      readline.close();
-    } else {
-      //reprompt user
-      readline.setPrompt(`Error reading list, please try again \n`);
-      readline.prompt();
-      readline.on('line', (userInput) => {
-        if (userInput) {
-          console.log(`Your list: ${userInput}`);
-          readline.close();
-        } else {
-          readline.setPrompt(
-            `Repeat error reading list, please try again or press ctrl + c to exit the program \n`,
-          );
-          readline.prompt();
-        }
-      });
-    }
-  },
-);
-readline.on('close', () => {
-  console.log('thank you for providing your list');
-});
+let getUserInput = () => {
+  const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  readline.question(
+    `Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas. \n`,
+    (userInput) => {
+      if (userInput) {
+        console.log(`Your list: ${userInput}`);
+        readline.close();
+      }
+    },
+  );
+  readline.on('close', () => {
+    console.log('thank you for providing your list');
+  });
+};
 
 //get user input and run a test to ensure that it meets specified parameters
 //convert input into usable data, e.g. an array
