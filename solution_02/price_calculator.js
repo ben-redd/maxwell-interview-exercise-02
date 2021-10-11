@@ -16,6 +16,7 @@ class PriceCalculator {
         isOnSale: true,
         saleUnitNum: 2,
         salePrice: 5.0,
+        saleSavings: 2.94,
         quantity: 0,
         totalPrice: 0,
         totalSaved: 0,
@@ -25,6 +26,7 @@ class PriceCalculator {
         isOnSale: true,
         saleUnitNum: 3,
         salePrice: 6.0,
+        saleSavings: 0.51,
         quantity: 0,
         totalPrice: 0,
         totalSaved: 0,
@@ -34,6 +36,7 @@ class PriceCalculator {
         isOnSale: false,
         saleUnitNum: undefined,
         salePrice: undefined,
+        saleSavings: undefined,
         quantity: 0,
         totalPrice: 0,
         totalSaved: 0,
@@ -43,6 +46,7 @@ class PriceCalculator {
         isOnSale: false,
         saleUnitNum: undefined,
         salePrice: undefined,
+        saleSavings: undefined,
         quantity: 0,
         totalPrice: 0,
         totalSaved: 0,
@@ -88,28 +92,40 @@ class PriceCalculator {
     let amountSaved = 0;
     let dataDisplayArray = [];
     for (let key in this.pricingTable) {
-      if (this.pricingTable[key].quantity > 0) {
-        if (this.pricingTable[key].isOnSale === true) {
-          this.pricingTable[key].totalPrice =
-            Math.floor(
-              this.pricingTable[key].quantity /
-                this.pricingTable[key].saleUnitNum *
-                this.pricingTable[key].salePrice,
-            ) +
-            (this.pricingTable[key].quantity %
-              this.pricingTable[key].saleUnitNum) *
-              this.pricingTable[key].unitPrice;
-          total += this.pricingTable[key].totalPrice;
+      //destructure this.pricingTable[key]
+      let {
+        quantity,
+        isOnSale,
+        totalPrice,
+        unitPrice,
+        saleUnitNum,
+        salePrice,
+        saleSavings,
+        totalSaved,
+      } = this.pricingTable[key];
+      if (quantity > 0) {
+        //calculation if item is on sale
+        if (isOnSale === true) {
+          let saleUnits = Math.floor(quantity / saleUnitNum);
+          totalPrice = Number(
+            (saleUnits * salePrice +
+              (quantity % saleUnitNum) * unitPrice).toFixed(2),
+          );
+          totalSaved = Number((saleUnits * saleSavings).toFixed(2));
+          total += totalPrice;
+          total = Number(total.toFixed(2));
+          amountSaved += totalSaved;
         } else {
-          this.pricingTable[key].totalPrice =
-            this.pricingTable[key].quantity * this.pricingTable[key].unitPrice;
-          total += this.pricingTable[key].totalPrice;
+          //normal price calculation if item is not on sale
+          totalPrice = Number((quantity * unitPrice).toFixed(2));
+          total += totalPrice;
+          total = Number(total.toFixed(2));
         }
 
         dataDisplayArray.push({
           Item: key,
-          Quantity: this.pricingTable[key].quantity,
-          Price: `$${this.pricingTable[key].totalPrice}`,
+          Quantity: quantity,
+          Price: `$${totalPrice}`,
         });
       }
     }
@@ -127,45 +143,3 @@ if (isValid) {
   purchase.updateQuantity(userInput);
   purchase.calculateTotalCost();
 }
-
-//How Will I solve the problem?
-
-//****** Part 1 ******
-//Store data of this weeks pricing table for the local grocery store
-// pricing table
-// Item     Unit price        Sale price
-// --------------------------------------
-// Milk      $3.97            2 for $5.00
-// Bread     $2.17            3 for $6.00
-// Banana    $0.99
-// Apple     $0.89
-
-//****** Part 2 ******
-//prompt the user for an input of the items available at the grocery store
-//be sure to specify parameters for the user input such as commas or spaces between words
-
-//get user input and run a test to ensure that it meets specified parameters
-
-//****** Part 3 ******
-//write a function or method that can take the user input, and the store pricing table and then calculate the total cost
-
-//****** Part 4 ******
-//print the total cost in a format similar to what is shown below:
-// Item     Quantity      Price
-// --------------------------------------
-// Milk      3            $8.97
-// Bread     4            $8.17
-// Apple     1            $0.89
-// Banana    1            $0.99
-
-// Total price : $19.02
-// You saved $3.45 today.
-
-//****** Part 5 ******
-//think of various things that could potentially break the code I've written, and write tests to ensure everything is ////working properly
-
-//****** Part 6 ******
-//refactor code to ensure readability and efficiency
-
-//****** Part 7 ******
-//Test again
