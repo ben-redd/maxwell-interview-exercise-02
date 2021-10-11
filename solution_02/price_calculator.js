@@ -16,6 +16,10 @@
 // Bread     $2.17            3 for $6.00
 // Banana    $0.99
 // Apple     $0.89
+
+//import prompt-sync package
+const prompt = require('prompt-sync')({ sigint: true });
+
 class PriceCalculator {
   constructor() {
     this.pricingTable = {
@@ -48,24 +52,20 @@ class PriceCalculator {
     this.pricingArray = Object.keys(this.pricingTable);
   }
 
+  //convert input into usable data, e.g. an array
+  convertStringToArray(string) {
+    return string.replace(/ /g, '').toLowerCase().split(',');
+  }
   //prompt user for input
   getUserInput() {
-    const readline = require('readline').createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    readline.question(
-      `Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas. \n`,
-      (userInput) => {
-        if (userInput) {
-          console.log(`Your list: ${userInput}`);
-          readline.close();
-        }
-      },
+    let userInput = prompt(
+      'Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas: ',
     );
-    readline.on('close', () => {
-      console.log('thank you for providing your list');
-    });
+    console.log(`your input: ${userInput}`);
+    //convert userInput into an array. Removes white space and converts to lowercase as well
+    let userInputArray = this.convertStringToArray(userInput);
+    console.log(`your input as an array: ${userInputArray}`);
+    return userInputArray;
   }
 }
 
@@ -74,10 +74,6 @@ class PriceCalculator {
 //be sure to specify parameters for the user input such as commas or spaces between words
 
 //get user input and run a test to ensure that it meets specified parameters
-//convert input into usable data, e.g. an array
-let convertStringToArray = (string) => {
-  return string.replace(/ /g, '').toLowerCase().split(',');
-};
 
 //checks to make sure that the
 let compareArrayValues = (userArr, pricing) => {
