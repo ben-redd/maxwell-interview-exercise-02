@@ -1,11 +1,4 @@
-//what is the problem?
-/*
- The task is to build a program which when executed would ask the user to list all the items purchased in any order. Once the user has listed all the items, print the total cost. You need to build a solution for the given items and you do not need to worry about items which would be added in future. 
- */
-
-//  We are looking for you to demonstrate your knowledge related to common software practices to include reusability, portability and encapsulation - to name a few.
-
-//import prompt-sync package
+//imports
 const prompt = require('prompt-sync')({ sigint: true });
 
 class PriceCalculator {
@@ -41,7 +34,7 @@ class PriceCalculator {
         saleSavings: undefined,
       },
     };
-    //user purchase Data that will contain which items the user buys, quantity of items, total price of each type, and total saved for sale types.
+    //user purchase Data that will contain which items the user inputs, quantity of items, total price of each type, and total amount saved for sale types.
     this.userPurchaseData = {};
   }
 
@@ -57,7 +50,6 @@ class PriceCalculator {
     console.log('e.g. Your input: milk, milk, bread, banana\n');
     let userInput = prompt('Your input: ');
     console.log(`your input: ${userInput}`);
-    //convert userInput into an array. Removes white space and converts to lowercase as well
     let userInputArray = this.convertStringToArray(userInput);
     if (this.isInputValid(userInputArray)) {
       this.updateUserPurchaseData(userInputArray);
@@ -66,7 +58,7 @@ class PriceCalculator {
     return false;
   }
 
-  //convert input into usable data, e.g. an array
+  //convert input into usable array. Removes white space and converts to lowercase
   convertStringToArray(string) {
     return string.replace(/ /g, '').toLowerCase().split(',');
   }
@@ -100,7 +92,7 @@ class PriceCalculator {
   calculateTotalCost() {
     let total = 0;
     let amountSaved = 0;
-    let dataDisplayArray = [];
+    let dataDisplayTable = [];
     for (let key in this.userPurchaseData) {
       //destructure this.pricingTable[key] and this.userPurchaseData[key]
       let {
@@ -134,7 +126,7 @@ class PriceCalculator {
           total = Number(total.toFixed(2));
         }
 
-        dataDisplayArray.push({
+        dataDisplayTable.push({
           Item: key,
           Quantity: quantity,
           Price: `$${this.userPurchaseData[key].totalPrice}`,
@@ -144,7 +136,7 @@ class PriceCalculator {
     }
     console.log(Object.entries(this.pricingTable));
     console.log(Object.entries(this.userPurchaseData));
-    console.table(dataDisplayArray);
+    console.table(dataDisplayTable);
     console.log(`Total price : $${total}`);
     console.log(`Total Savings : $${amountSaved}`);
   }
@@ -169,5 +161,5 @@ if (purchase.getUserInput()) {
 
 -[x]clean up calculate total cost and write a seperate function to display data
 
--[]fix prompt sync re-prompt issue on new lines
+-[x]fix prompt sync re-prompt issue on new lines
 */
