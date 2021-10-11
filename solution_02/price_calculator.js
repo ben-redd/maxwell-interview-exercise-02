@@ -110,6 +110,8 @@ class PriceCalculator {
       } = this.pricingTable[key];
       const { quantity } = this.userPurchaseData[key];
       //calculation if item is on sale
+      //totalPrice represents the prices of all items added together
+      //totalItemPrice represents the price for all units of one type of item
       if (isOnSale === true) {
         let saleUnits = Math.floor(quantity / saleUnitNum);
         this.userPurchaseData[key].totalItemPrice += Number(
@@ -140,7 +142,7 @@ class PriceCalculator {
           this.displayData.totalPrice.toFixed(2),
         );
       }
-
+      //add data to displayData as we iterate through to calculate prices
       this.displayData.itemDisplayTable.push({
         Item: key,
         Quantity: quantity,
