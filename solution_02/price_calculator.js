@@ -36,6 +36,12 @@ class PriceCalculator {
     };
     //user purchase Data that will contain which items the user inputs, quantity of items, total price of each type, and total amount saved for sale types.
     this.userPurchaseData = {};
+    //data to be displayed when the program is done running
+    this.displayData = {
+      itemDisplayTable: [],
+      totalPrice: 0,
+      totalSavings: 0,
+    };
   }
 
   //prompt user for input, then modify and check. Returns a boolean based on the validity of the input
@@ -47,9 +53,8 @@ class PriceCalculator {
     console.log(
       'Please enter all of the items you wish to purchase, separated by commas. ',
     );
-    console.log('e.g. Your input: milk, milk, bread, banana\n');
+    console.log('e.g. Your input: milk, milk, bread, banana.\n');
     let userInput = prompt('Your input: ');
-    console.log(`your input: ${userInput}`);
     let userInputArray = this.convertStringToArray(userInput);
     if (this.isInputValid(userInputArray)) {
       this.updateUserPurchaseData(userInputArray);
@@ -74,78 +79,85 @@ class PriceCalculator {
     }
     return true;
   }
+
+  //Adds item objects and enclosed data to userPurchaseData object
   updateUserPurchaseData(inputArr) {
     for (let i = 0; i < inputArr.length; i++) {
+      //if userPurchase data already has the property, increment quantity
       if (this.pricingTable.hasOwnProperty(inputArr[i])) {
         if (this.userPurchaseData.hasOwnProperty(inputArr[i])) {
           this.userPurchaseData[inputArr[i]].quantity++;
         } else {
+          //if userPurchaseData doesn't have the property, add it
           this.userPurchaseData[inputArr[i]] = {
-            quantity: 1,
-            totalPrice: 0,
-            totalSaved: 0,
+            quantity: 1.0,
+            totalItemPrice: 0,
+            totalItemSavings: 0,
           };
         }
       }
     }
   }
   calculateTotalCost() {
-    let total = 0;
-    let amountSaved = 0;
-    let dataDisplayTable = [];
     for (let key in this.userPurchaseData) {
       //destructure this.pricingTable[key] and this.userPurchaseData[key]
-      let {
+      const {
         isOnSale,
         unitPrice,
         saleUnitNum,
         salePrice,
         saleSavings,
       } = this.pricingTable[key];
-      let { quantity } = this.userPurchaseData[key];
-      if (quantity > 0) {
-        //calculation if item is on sale
-        if (isOnSale === true) {
-          let saleUnits = Math.floor(quantity / saleUnitNum);
-          this.userPurchaseData[key].totalPrice += Number(
-            (saleUnits * salePrice +
-              (quantity % saleUnitNum) * unitPrice).toFixed(2),
-          );
-          this.userPurchaseData[key].totalSaved = Number(
-            (saleUnits * saleSavings).toFixed(2),
-          );
-          total += this.userPurchaseData[key].totalPrice;
-          total = Number(total.toFixed(2));
-          amountSaved += this.userPurchaseData[key].totalSaved;
-        } else {
-          //normal price calculation if item is not on sale
-          this.userPurchaseData[key].totalPrice += Number(
-            (quantity * unitPrice).toFixed(2),
-          );
-          total += this.userPurchaseData[key].totalPrice;
-          total = Number(total.toFixed(2));
-        }
-
-        dataDisplayTable.push({
-          Item: key,
-          Quantity: quantity,
-          Price: `$${this.userPurchaseData[key].totalPrice}`,
-          Savings: `$${this.userPurchaseData[key].totalSaved}`,
-        });
+      const { quantity } = this.userPurchaseData[key];
+      //calculation if item is on sale
+      if (isOnSale === true) {
+        let saleUnits = Math.floor(quantity / saleUnitNum);
+        this.userPurchaseData[key].totalItemPrice += Number(
+          (saleUnits * salePrice +
+            (quantity % saleUnitNum) * unitPrice).toFixed(2),
+        );
+        this.userPurchaseData[key].totalItemSavings = Number(
+          (saleUnits * saleSavings).toFixed(2),
+        );
+        this.displayData.totalPrice += this.userPurchaseData[
+          key
+        ].totalItemPrice;
+        this.displayData.totalPrice = Number(
+          this.displayData.totalPrice.toFixed(2),
+        );
+        this.displayData.totalSavings += this.userPurchaseData[
+          key
+        ].totalItemSavings;
+      } else {
+        //normal price calculation if item is not on sale
+        this.userPurchaseData[key].totalItemPrice += Number(
+          (quantity * unitPrice).toFixed(2),
+        );
+        this.displayData.totalPrice += this.userPurchaseData[
+          key
+        ].totalItemPrice;
+        this.displayData.totalPrice = Number(
+          this.displayData.totalPrice.toFixed(2),
+        );
       }
+
+      this.displayData.itemDisplayTable.push({
+        Item: key,
+        Quantity: quantity,
+        Price: `$${this.userPurchaseData[key].totalItemPrice}`,
+        Savings: `$${this.userPurchaseData[key].totalItemSavings}`,
+      });
     }
-    console.log(Object.entries(this.pricingTable));
-    console.log(Object.entries(this.userPurchaseData));
-    console.table(dataDisplayTable);
-    console.log(`Total price : $${total}`);
-    console.log(`Total Savings : $${amountSaved}`);
+
+    this.printPurchaseData();
   }
 
-  //   printPurchaseData(){
-  //       const dataTable = [
-  //           ['Item', 'Quantity', 'Price', 'Savings']
-  //       ]
-  //   }
+  printPurchaseData() {
+    const { itemDisplayTable, totalPrice, totalSavings } = this.displayData;
+    console.table(itemDisplayTable);
+    console.log(`Total price : $${totalPrice}`);
+    console.log(`Total Savings : $${totalSavings} \n`);
+  }
 }
 
 //execution
