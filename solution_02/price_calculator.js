@@ -5,18 +5,6 @@
 
 //  We are looking for you to demonstrate your knowledge related to common software practices to include reusability, portability and encapsulation - to name a few.
 
-//How Will I solve the problem?
-
-//****** Part 1 ******
-//Store data of this weeks pricing table for the local grocery store
-// pricing table
-// Item     Unit price        Sale price
-// --------------------------------------
-// Milk      $3.97            2 for $5.00
-// Bread     $2.17            3 for $6.00
-// Banana    $0.99
-// Apple     $0.89
-
 //import prompt-sync package
 const prompt = require('prompt-sync')({ sigint: true });
 
@@ -49,7 +37,7 @@ class PriceCalculator {
       },
     };
     //pricing array made for easy comparison of the keys in our pricing table object
-    this.pricingArray = Object.keys(this.pricingTable);
+    this.storeItemList = Object.keys(this.pricingTable);
   }
 
   //convert input into usable data, e.g. an array
@@ -64,10 +52,41 @@ class PriceCalculator {
     console.log(`your input: ${userInput}`);
     //convert userInput into an array. Removes white space and converts to lowercase as well
     let userInputArray = this.convertStringToArray(userInput);
-    console.log(`your input as an array: ${userInputArray}`);
     return userInputArray;
   }
+
+  //checks user input for invalid items
+  isInputValid(inputArr, storeItemArr) {
+    for (let i = 0; i < inputArr.length; i++) {
+      if (!storeItemArr.includes(inputArr[i])) {
+        console.log(`the following value is invalid: ${inputArr[i]}`);
+        console.log('Please exit the program and try again.');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  calculateTotalCost(inputArr, pricingList) {}
 }
+
+//execution
+let purchase = new PriceCalculator();
+let userInput = purchase.getUserInput();
+let isValid = purchase.isInputValid(userInput, purchase.storeItemList);
+console.log(isValid);
+
+//How Will I solve the problem?
+
+//****** Part 1 ******
+//Store data of this weeks pricing table for the local grocery store
+// pricing table
+// Item     Unit price        Sale price
+// --------------------------------------
+// Milk      $3.97            2 for $5.00
+// Bread     $2.17            3 for $6.00
+// Banana    $0.99
+// Apple     $0.89
 
 //****** Part 2 ******
 //prompt the user for an input of the items available at the grocery store
@@ -75,19 +94,6 @@ class PriceCalculator {
 
 //get user input and run a test to ensure that it meets specified parameters
 
-//checks to make sure that the
-let compareArrayValues = (userArr, pricing) => {
-  for (let i = 0; i < userArr.length; i++) {
-    if (!pricing.includes(userArr[i])) {
-      console.log(`the following value is invalid: ${userArr[i]}`);
-      return false;
-    }
-  }
-  return true;
-};
-
-let purchase = new PriceCalculator();
-purchase.getUserInput();
 //****** Part 3 ******
 //write a function or method that can take the user input, and the store pricing table and then calculate the total cost
 
