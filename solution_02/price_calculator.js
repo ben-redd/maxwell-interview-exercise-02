@@ -36,8 +36,6 @@ class PriceCalculator {
         salePrice: undefined,
       },
     };
-    //pricing array made for easy comparison of the keys in our pricing table object
-    this.storeItemList = Object.keys(this.pricingTable);
   }
 
   //convert input into usable data, e.g. an array
@@ -56,9 +54,9 @@ class PriceCalculator {
   }
 
   //checks user input for invalid items
-  isInputValid(inputArr, storeItemArr) {
+  isInputValid(inputArr, storeItemObj) {
     for (let i = 0; i < inputArr.length; i++) {
-      if (!storeItemArr.includes(inputArr[i])) {
+      if (!storeItemObj.hasOwnProperty(inputArr[i])) {
         console.log(`the following value is invalid: ${inputArr[i]}`);
         console.log('Please exit the program and try again.');
         return false;
@@ -73,7 +71,7 @@ class PriceCalculator {
 //execution
 let purchase = new PriceCalculator();
 let userInput = purchase.getUserInput();
-let isValid = purchase.isInputValid(userInput, purchase.storeItemList);
+let isValid = purchase.isInputValid(userInput, purchase.pricingTable);
 console.log(isValid);
 
 //How Will I solve the problem?
