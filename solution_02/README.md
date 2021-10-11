@@ -8,6 +8,7 @@
 
 ### Running the program
 In your CLI, type the following command $node price_calculator.js
+
 -this will run the file price_calculator.js in the terminal.
 -Follow the prompts in the terminal.
 -Be sure to format your input based on the instructions in the prompt.
