@@ -54,11 +54,7 @@ class PriceCalculator {
     };
   }
 
-  //convert input into usable data, e.g. an array
-  convertStringToArray(string) {
-    return string.replace(/ /g, '').toLowerCase().split(',');
-  }
-  //prompt user for input
+  //prompt user for input, then modify and check. Returns a boolean based on the validity of the input
   getUserInput() {
     let userInput = prompt(
       'Based on the current store inventory of: Milk, Bread, Banana, and Apple. Please enter all of the items you wish to purchase, separated by commas: ',
@@ -66,7 +62,16 @@ class PriceCalculator {
     console.log(`your input: ${userInput}`);
     //convert userInput into an array. Removes white space and converts to lowercase as well
     let userInputArray = this.convertStringToArray(userInput);
-    return userInputArray;
+    if (this.isInputValid(userInputArray)) {
+      this.updateQuantity(userInputArray);
+      return true;
+    }
+    return false;
+  }
+
+  //convert input into usable data, e.g. an array
+  convertStringToArray(string) {
+    return string.replace(/ /g, '').toLowerCase().split(',');
   }
 
   //checks user input for invalid items
@@ -137,9 +142,16 @@ class PriceCalculator {
 
 //execution
 let purchase = new PriceCalculator();
-let userInput = purchase.getUserInput();
-let isValid = purchase.isInputValid(userInput);
-if (isValid) {
-  purchase.updateQuantity(userInput);
+if (purchase.getUserInput()) {
   purchase.calculateTotalCost();
 }
+
+/* *** REFACTOR PLAN ***
+-Seperate data structures of pricing table and user input
+
+-combine functions into getUserInput
+
+-clean up calculate total cost and write a seperate function to display data
+
+-fix prompt sync re-prompt issue on new lines
+*/
