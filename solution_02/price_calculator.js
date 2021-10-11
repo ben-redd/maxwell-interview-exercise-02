@@ -16,24 +16,32 @@ class PriceCalculator {
         isOnSale: true,
         saleUnitNum: 2,
         salePrice: 5.0,
+        quantity: 0,
+        totalPrice: 0,
       },
       bread: {
         unitPrice: 2.17,
         isOnSale: true,
         saleUnitNum: 3,
         salePrice: 6.0,
+        quantity: 0,
+        totalPrice: 0,
       },
       banana: {
         unitPrice: 0.99,
         isOnSale: false,
         saleUnitNum: undefined,
         salePrice: undefined,
+        quantity: 0,
+        totalPrice: 0,
       },
       apple: {
         unitPrice: 0.89,
         isOnSale: false,
         saleUnitNum: undefined,
         salePrice: undefined,
+        quantity: 0,
+        totalPrice: 0,
       },
     };
   }
@@ -64,7 +72,15 @@ class PriceCalculator {
     }
     return true;
   }
-
+  updateQuantity(inputArr, storeItemObj) {
+    for (let i = 0; i < inputArr.length; i++) {
+      if (storeItemObj.hasOwnProperty(inputArr[i])) {
+        storeItemObj[inputArr[i]].quantity++;
+        console.log(storeItemObj[inputArr[i]].quantity);
+      }
+    }
+    return true;
+  }
   calculateTotalCost(inputArr, pricingList) {}
 }
 
@@ -72,7 +88,9 @@ class PriceCalculator {
 let purchase = new PriceCalculator();
 let userInput = purchase.getUserInput();
 let isValid = purchase.isInputValid(userInput, purchase.pricingTable);
-console.log(isValid);
+if (isValid) {
+  purchase.updateQuantity(userInput, purchase.pricingTable);
+}
 
 //How Will I solve the problem?
 
