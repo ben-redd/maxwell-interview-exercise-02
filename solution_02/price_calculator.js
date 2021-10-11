@@ -18,6 +18,7 @@ class PriceCalculator {
         salePrice: 5.0,
         quantity: 0,
         totalPrice: 0,
+        totalSaved: 0,
       },
       bread: {
         unitPrice: 2.17,
@@ -26,6 +27,7 @@ class PriceCalculator {
         salePrice: 6.0,
         quantity: 0,
         totalPrice: 0,
+        totalSaved: 0,
       },
       banana: {
         unitPrice: 0.99,
@@ -34,6 +36,7 @@ class PriceCalculator {
         salePrice: undefined,
         quantity: 0,
         totalPrice: 0,
+        totalSaved: 0,
       },
       apple: {
         unitPrice: 0.89,
@@ -42,6 +45,7 @@ class PriceCalculator {
         salePrice: undefined,
         quantity: 0,
         totalPrice: 0,
+        totalSaved: 0,
       },
     };
   }
@@ -62,34 +66,66 @@ class PriceCalculator {
   }
 
   //checks user input for invalid items
-  isInputValid(inputArr, storeItemObj) {
+  isInputValid(inputArr) {
     for (let i = 0; i < inputArr.length; i++) {
-      if (!storeItemObj.hasOwnProperty(inputArr[i])) {
+      if (!this.pricingTable.hasOwnProperty(inputArr[i])) {
         console.log(`the following value is invalid: ${inputArr[i]}`);
-        console.log('Please exit the program and try again.');
+        console.log('Please try again.');
         return false;
       }
     }
     return true;
   }
-  updateQuantity(inputArr, storeItemObj) {
+  updateQuantity(inputArr) {
     for (let i = 0; i < inputArr.length; i++) {
-      if (storeItemObj.hasOwnProperty(inputArr[i])) {
-        storeItemObj[inputArr[i]].quantity++;
-        console.log(storeItemObj[inputArr[i]].quantity);
+      if (this.pricingTable.hasOwnProperty(inputArr[i])) {
+        this.pricingTable[inputArr[i]].quantity++;
       }
     }
-    return true;
   }
-  calculateTotalCost(inputArr, pricingList) {}
+  calculateTotalCost() {
+    let total = 0;
+    let amountSaved = 0;
+    let dataDisplayArray = [];
+    for (let key in this.pricingTable) {
+      if (this.pricingTable[key].quantity > 0) {
+        if (this.pricingTable[key].isOnSale === true) {
+          this.pricingTable[key].totalPrice =
+            Math.floor(
+              this.pricingTable[key].quantity /
+                this.pricingTable[key].saleUnitNum *
+                this.pricingTable[key].salePrice,
+            ) +
+            (this.pricingTable[key].quantity %
+              this.pricingTable[key].saleUnitNum) *
+              this.pricingTable[key].unitPrice;
+          total += this.pricingTable[key].totalPrice;
+        } else {
+          this.pricingTable[key].totalPrice =
+            this.pricingTable[key].quantity * this.pricingTable[key].unitPrice;
+          total += this.pricingTable[key].totalPrice;
+        }
+
+        dataDisplayArray.push({
+          Item: key,
+          Quantity: this.pricingTable[key].quantity,
+          Price: `$${this.pricingTable[key].totalPrice}`,
+        });
+      }
+    }
+    console.table(dataDisplayArray);
+    console.log(`Total price : $${total}`);
+    console.log(`Total Savings : $${amountSaved}`);
+  }
 }
 
 //execution
 let purchase = new PriceCalculator();
 let userInput = purchase.getUserInput();
-let isValid = purchase.isInputValid(userInput, purchase.pricingTable);
+let isValid = purchase.isInputValid(userInput);
 if (isValid) {
-  purchase.updateQuantity(userInput, purchase.pricingTable);
+  purchase.updateQuantity(userInput);
+  purchase.calculateTotalCost();
 }
 
 //How Will I solve the problem?
